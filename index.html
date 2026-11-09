@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>달콤포근! 메가홍균의 비밀 디저트 카페 🧁</title>
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas-Confetti (축하 효과용 CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts (Gaegu, Noto Sans KR) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FFF9F3',
+                        pastelPink: '#FFD1DC',
+                        pastelYellow: '#FFE5B4',
+                        pastelBlue: '#BCE6FF',
+                        pastelGreen: '#C1E1C1',
+                        pastelPurple: '#E6E6FA',
+                        candyRed: '#FF6B8B',
+                        sweetBrown: '#6B4F4F',
+                    },
+                    fontFamily: {
+                        gaegu: ['Gaegu', 'cursive'],
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 기본 배경 패턴 및 폰트 정의 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FFF9F3;
+            background-image: radial-gradient(#FFD1DC 1.5px, transparent 1.5px), radial-gradient(#BCE6FF 1.5px, #FFF9F3 1.5px);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+
+        /* 메가홍균 텍스트 바운스 애니메이션 */
+        .bounce-letter {
+            display: inline-block;
+            animation: bounce 1.2s infinite ease-in-out alternate;
+        }
+        
+        .bounce-letter:nth-child(1) { animation-delay: 0.0s; color: #FF7B9C; }
+        .bounce-letter:nth-child(2) { animation-delay: 0.15s; color: #FFAA5A; }
+        .bounce-letter:nth-child(3) { animation-delay: 0.3s; color: #4DA1A9; }
+        .bounce-letter:nth-child(4) { animation-delay: 0.45s; color: #795299; }
+
+        @keyframes bounce {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-16px) scale(1.1); }
+        }
+
+        /* 3D 플립 카드 스타일 */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* 퀴즈 틀렸을 때 진동 애니메이션 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-sweetBrown flex flex-col items-center justify-between p-4 sm:p-6 md:p-8">
+
+    <!-- 메인 컨테이너 -->
+    <main class="w-full max-w-md sm:max-w-xl md:max-w-3xl bg-white/90 backdrop-blur-md rounded-3xl shadow-xl p-6 sm:p-8 border-4 border-pastelPink my-auto transition-all">
+
+        <!-- 헤더 영역: 파스텔 디저트 카페 간판 -->
+        <header class="text-center mb-8 border-b-2 border-dashed border-pastelPink pb-6">
+            <div class="inline-block bg-pastelYellow px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold text-sweetBrown tracking-wider mb-2 shadow-sm">
+                🍰 SWEET DESSERT PROFILE 🍩
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-extrabold font-gaegu tracking-wider mb-2">
+                안녕하세요! <span class="inline-block px-1">
+                    <span class="bounce-letter">메</span>
+                    <span class="bounce-letter">가</span>
+                    <span class="bounce-letter">홍</span>
+                    <span class="bounce-letter">균</span>
+                </span>입니다! 🧁
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-500 font-medium">
+                달콤함 300% 추가된 저의 비밀스러운 상자에 오신 것을 환영합니다!
+            </p>
+        </header>
+
+        <!-- 섹션 1: 내가 좋아하는 3가지 (카드 뒤집기) -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold font-gaegu text-center mb-2 text-sweetBrown">
+                🍓 메가홍균이 최애하는 3가지 디저트 픽!
+            </h2>
+            <p class="text-xs text-center text-gray-400 mb-6">
+                (카드를 클릭하거나 터치하면 비밀 이유가 짜잔! 하고 나타나요)
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                <!-- 카드 1: 포켓몬 -->
+                <div class="h-52 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                    <div class="card-inner shadow-md hover:shadow-lg border-2 border-pastelPink rounded-3xl">
+                        <!-- 앞면 -->
+                        <div class="card-front bg-pastelPink/30 flex flex-col items-center justify-center p-4">
+                            <span class="text-5xl mb-2 transition-transform duration-300 hover:scale-125">⚡</span>
+                            <h3 class="text-xl font-bold font-gaegu text-sweetBrown">포켓몬</h3>
+                            <span class="mt-3 text-xs bg-white text-candyRed font-semibold px-3 py-1 rounded-full shadow-sm">
+                                Tap해서 뒤집기!
+                            </span>
+                        </div>
+                        <!-- 뒷면 -->
+                        <div class="card-back bg-pastelPink text-sweetBrown flex flex-col items-center justify-center p-4">
+                            <h4 class="font-bold text-base mb-1 font-gaegu">⚡ 왜 좋아할까?</h4>
+                            <p class="text-xs sm:text-sm leading-relaxed text-gray-700">
+                                언젠가 피카츄 100만 볼트로 스마트폰 보조배터리를 평생 충전하며 살고 싶기 때문이지! ⚡📱
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 2: 홍균 -->
+                <div class="h-52 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                    <div class="card-inner shadow-md hover:shadow-lg border-2 border-pastelYellow rounded-3xl">
+                        <!-- 앞면 -->
+                        <div class="card-front bg-pastelYellow/40 flex flex-col items-center justify-center p-4">
+                            <span class="text-5xl mb-2 transition-transform duration-300 hover:scale-125">👑</span>
+                            <h3 class="text-xl font-bold font-gaegu text-sweetBrown">홍균</h3>
+                            <span class="mt-3 text-xs bg-white text-sweetBrown font-semibold px-3 py-1 rounded-full shadow-sm">
+                                Tap해서 뒤집기!
+                            </span>
+                        </div>
+                        <!-- 뒷면 -->
+                        <div class="card-back bg-pastelYellow text-sweetBrown flex flex-col items-center justify-center p-4">
+                            <h4 class="font-bold text-base mb-1 font-gaegu">👑 왜 좋아할까?</h4>
+                            <p class="text-xs sm:text-sm leading-relaxed text-gray-700">
+                                자기애 만렙! 세상에서 나 자신을 제일 사랑해야 매일매일 달콤하고 행복한 법이니까! 🥰
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 3: 김밥 -->
+                <div class="h-52 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                    <div class="card-inner shadow-md hover:shadow-lg border-2 border-pastelGreen rounded-3xl">
+                        <!-- 앞면 -->
+                        <div class="card-front bg-pastelGreen/40 flex flex-col items-center justify-center p-4">
+                            <span class="text-5xl mb-2 transition-transform duration-300 hover:scale-125">🍙</span>
+                            <h3 class="text-xl font-bold font-gaegu text-sweetBrown">김밥</h3>
+                            <span class="mt-3 text-xs bg-white text-emerald-700 font-semibold px-3 py-1 rounded-full shadow-sm">
+                                Tap해서 뒤집기!
+                            </span>
+                        </div>
+                        <!-- 뒷면 -->
+                        <div class="card-back bg-pastelGreen text-sweetBrown flex flex-col items-center justify-center p-4">
+                            <h4 class="font-bold text-base mb-1 font-gaegu">🍙 왜 좋아할까?</h4>
+                            <p class="text-xs sm:text-sm leading-relaxed text-gray-700">
+                                밥, 야채, 참치까지 하나로 똘똘 말려 완벽함을 자랑하잖아! 나처럼 알찬 매력이 가득해서! 🤤
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 섹션 2: OX 퀴즈 -->
+        <section class="mb-10 bg-pastelPurple/30 rounded-2xl p-5 border-2 border-pastelPurple text-center">
+            <h2 class="text-xl font-bold font-gaegu text-purple-900 mb-1">
+                ❓ 메가홍균 진실 검증 OX 퀴즈!
+            </h2>
+            <p class="text-sm font-semibold text-gray-700 mb-4">
+                "나는 솔직히 귀엽다."
+            </p>
+
+            <div class="flex justify-center gap-4 mb-3">
+                <button onclick="checkQuiz(true)" class="w-20 h-16 bg-emerald-400 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-2xl rounded-2xl shadow-md transition-all flex items-center justify-center">
+                    O
+                </button>
+                <button onclick="checkQuiz(false)" class="w-20 h-16 bg-rose-400 hover:bg-rose-500 active:scale-95 text-white font-extrabold text-2xl rounded-2xl shadow-md transition-all flex items-center justify-center">
+                    X
+                </button>
+            </div>
+
+            <!-- 결과 메시지 박스 -->
+            <div id="quiz-result" class="min-h-[2.5rem] flex items-center justify-center font-bold text-sm sm:text-base">
+                <span class="text-gray-400 text-xs">O 또는 X 버튼을 눌러 정답을 맞혀보세요!</span>
+            </div>
+        </section>
+
+        <!-- 섹션 3: 메가홍균의 나만의 명언 생성기 -->
+        <section class="text-center bg-pastelBlue/20 rounded-2xl p-6 border-2 border-pastelBlue">
+            <h2 class="text-xl font-bold font-gaegu text-blue-900 mb-2">
+                📜 메가홍균의 달콤 살벌(?) 나만의 명언
+            </h2>
+            
+            <div class="bg-white rounded-xl p-4 shadow-inner min-h-[80px] flex items-center justify-center mb-4 border border-pastelBlue/50">
+                <p id="quote-text" class="text-sm sm:text-base font-semibold text-gray-700 leading-relaxed">
+                    "아래 버튼을 누르면 띵언이 팡팡 터집니다!"
+                </p>
+            </div>
+
+            <button onclick="getRandomQuote()" class="bg-gradient-to-r from-pastelPink to-pastelYellow hover:brightness-95 active:scale-95 text-sweetBrown font-bold text-sm sm:text-base px-6 py-3 rounded-full shadow-md border-2 border-white transition-all flex items-center justify-center gap-2 mx-auto">
+                <span>✨ 명언 뽑기 ✨</span>
+            </button>
+        </section>
+
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="mt-6 text-center text-xs text-gray-500">
+        <p>© 2026 메가홍균의 파스텔 디저트 월드. All rights reserved.</p>
+    </footer>
+
+    <!-- 자바스크립트 로직 -->
+    <script>
+        // 1. 카드 뒤집기 토글 함수
+        function flipCard(cardElement) {
+            const inner = cardElement.querySelector('.card-inner');
+            inner.classList.toggle('card-flipped');
+        }
+
+        // 2. OX 퀴즈 정답 검증 함수
+        function checkQuiz(userAnswer) {
+            const resultDiv = document.getElementById('quiz-result');
+            const parentSection = resultDiv.parentElement;
+
+            // 정답은 O (true)
+            if (userAnswer === true) {
+                // 폭죽 애니메이션 실행 (Canvas-Confetti)
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+
+                resultDiv.innerHTML = `
+                    <div class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-xl border border-emerald-300 w-full animate-bounce">
+                        🎉 정답입니다! 메가홍균은 지구상에서 제일 귀엽답니다! 💖
+                    </div>
+                `;
+            } else {
+                // 틀렸을 때 아쉬운 Shake 효과
+                parentSection.classList.remove('animate-shake');
+                void parentSection.offsetWidth; // 리플로우 강제 (애니메이션 재실행용)
+                parentSection.classList.add('animate-shake');
+
+                resultDiv.innerHTML = `
+                    <div class="bg-rose-100 text-rose-800 px-4 py-2 rounded-xl border border-rose-300 w-full">
+                        😭 틀렸어요! 다시 생각해보세요. 메가홍균이 안 귀엽다니 말도 안 돼! 💔
+                    </div>
+                `;
+            }
+        }
+
+        // 3. 나만의 명언 리스트 (10개 이상)
+        const quotes = [
+            "🥐 빵이 없으면 케이크를 먹으면 되고, 스트레스 받으면 떡볶이를 먹자.",
+            "⚡ 포켓몬 마스터는 못 되어도, 내 인생의 마스터는 나다!",
+            "🍙 김밥의 꼬꽁지가 제일 맛있는 것처럼, 인생의 끝자락엔 항상 달콤함이 기다린다.",
+            "🍩 칼로리는 맛있음의 단위일 뿐, 내 행복지수와 비례한다.",
+            "🍰 오늘은 내가 제일 달콤한 하루를 만든다. 귀여움은 덤!",
+            "✨ 거울아 거울아, 세상에서 누가 제일 귀엽니? (답: 메가홍균)",
+            "🍮 인생이 씁쓸하다면 푸딩 한 입으로 달달하게 코팅해봐!",
+            "🚀 내 매력은 우주만큼 넓어서 일주일에 다 보여줄 수 없다.",
+            "🍓 딸기 뷔페보다 알차고 슈크림빵보다 부드러운 사람이 바로 나!",
+            "🍬 행복은 먼 곳에 있지 않다. 지금 내 입안의 사탕 하나가 곧 행복이다.",
+            "🧸 쉬어가는 것도 능력이다. 마카롱 먹으면서 10분만 멍 때리자!",
+            "🌈 걱정은 적게, 웃음은 많이, 디저트는 크게!"
+        ];
+
+        let lastIndex = -1;
+
+        // 4. 랜덤 명언 출력 함수
+        function getRandomQuote() {
+            let randomIndex;
+            // 직전과 동일한 명언이 나오지 않도록 방지
+            do {
+                randomIndex = Math.floor(Math.random() * quotes.length);
+            } while (randomIndex === lastIndex && quotes.length > 1);
+
+            lastIndex = randomIndex;
+            
+            const quoteText = document.getElementById('quote-text');
+            
+            // 페이드 효과 감성 적용
+            quoteText.style.opacity = '0';
+            setTimeout(() => {
+                quoteText.innerText = quotes[randomIndex];
+                quoteText.style.opacity = '1';
+                quoteText.style.transition = 'opacity 0.3s ease-in-out';
+            }, 150);
+        }
+    </script>
+</body>
+</html>
